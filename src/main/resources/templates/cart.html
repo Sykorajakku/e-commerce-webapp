@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+  <!-- Your head content -->
+</head>
+<body>
+<header>
+  <div th:replace="~{ribbon}"></div>
+</header>
+<main sec:authorize="isAuthenticated()">
+  <h1>Cart Contents</h1>
+  <!-- Display products -->
+  <div class="product-list">
+    <div th:each="product : ${@cartService.getProducts()}">
+      <div class="product-item">
+        <!--img th:src="@{${product.image}}" alt="Product Image"-->
+        <h2 th:text="${product.name}"></h2>
+        <p th:text="${product.description}"></p>
+        <p>Price: <span th:text="${product.price}"></span></p>
+      </div>
+    </div>
+  </div>
+
+</main>
+<footer>
+  <!-- Your footer content -->
+</footer>
+</body>
+</html>

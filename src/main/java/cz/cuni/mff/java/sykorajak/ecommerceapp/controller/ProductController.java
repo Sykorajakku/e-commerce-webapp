@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -26,8 +28,15 @@ public class ProductController extends BaseController {
             // Retrieve all products
             products = productService.getAllProducts();
         }
+        model.addAttribute("product", new Product());
         model.addAttribute("products", products);
         return "products";
     }
 
+    @PostMapping("/products")
+    public String addProduct(@ModelAttribute("product") Product product, Model model) {
+        model.addAttribute("product", product);
+        productService.addProduct(product);
+        return "products";
+    }
 }

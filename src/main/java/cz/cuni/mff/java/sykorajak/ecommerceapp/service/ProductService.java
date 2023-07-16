@@ -30,8 +30,8 @@ public class ProductService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID: " + productId));
     }
 
-    public void addProduct(Product product) {
-        productRepository.save(product);
+    public Product addProduct(Product product) {
+        return productRepository.save(product);
     }
 
     public void updateProduct(Product product) {

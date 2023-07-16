@@ -2,8 +2,10 @@ package cz.cuni.mff.java.sykorajak.ecommerceapp;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,13 +21,16 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/products").hasRole("ADMIN")
+                        .requestMatchers("/products").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
+                        .defaultSuccessUrl("/products")
                         .permitAll()
                 )
-                .logout((logout) -> logout.permitAll());
+                .logout(LogoutConfigurer::permitAll);
 
         return http.build();
     }
@@ -39,6 +44,13 @@ public class WebSecurityConfig {
                         .roles("USER")
                         .build();
 
-        return new InMemoryUserDetailsManager(user);
+        UserDetails admin =
+                User.withDefaultPasswordEncoder()
+                        .username("admin")
+                        .password("admin")
+                        .roles("USER", "ADMIN")
+                        .build();
+
+        return new InMemoryUserDetailsManager(user, admin);
     }
 }
