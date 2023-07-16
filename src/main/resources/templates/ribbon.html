@@ -1,0 +1,5 @@
+<div class="ribbon">
+  <span th:if="${loggedIn}">Welcome, <span th:text="${user.name}"></span>! | <a th:href="@{/logout}">Logout</a></span>
+  <span th:unless="${loggedIn}"><a th:href="@{/login}">Login</a> or <a th:href="@{/register}">Register</a></span>
+  <span th:if="${loggedIn}">Items in cart: <span th:text="${cartItemCount}"></span></span>
+</div>
